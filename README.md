@@ -1,6 +1,5 @@
-# vue-splash
-
 # Laravel プロジェクトを作成する
+
 ## Laravel Valet
 ローカルに環境を構築するため、PC 自体に PHP やデータベースがインストールされている必要がある．
 ### Homebrew
@@ -32,7 +31,7 @@ $ composer global require laravel/valet
 $ valet install
 ```
 
-### アプリケーションの配信
+## プロジェクト作成
 プロジェクトの中に入って
 ```
 $ mkdir ~/Projects/laravel-app
@@ -41,3 +40,71 @@ $ valet park
 $ composer create-project laravel/laravel hoge
 ```
 ```http://hoge.test``` という URL でアプリケーションが配信される．
+
+## データベース作成
+Homebrewを使用してPostgreSQLをインストール
+```brew install postgresql```
+データベース作成
+```
+$ psql -U postgres
+Password for user postgres: 
+psql (9.6.3)
+Type "help" for help.
+
+postgres=# CREATE DATABASE vuesplash;
+CREATE DATABASE
+postgres=# \q
+```
+
+## Laravelの設定
+### app.php
+```config/app.php``` の ```locale```設定を日本語にする．
+```
+'locale' => 'ja',
+```
+
+### .env
+```
+APP_NAME=Vuesplash
+
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=vuesplash
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+```
+
+### EditorConfig
+```
+[*.{yml,json,scss,html,js,vue,blade.php}]
+indent_size = 2
+```
+
+## 確認
+```$ valet start```
+
+### エラー①
+```http://vuesplash.test``` にアクセス
+エラーが出た．
+```
+Homebrew PHP appears not to be linked.
+```
+解決法：homebrewでPHPへのリンクをきちんと貼る．
+```
+$ brew link php71 --force
+```
+
+### エラー②
+```http://vuesplash.test``` にアクセス
+502 Bad Gateway error
+
+解決法：
+```
+$ sudo brew services restart nginx && sudo brew services restart php71
+$ brew uninstall php71
+$ brew install php@7.2
+$ valet install
+$ brew link php72 --force
+```
+無事アクセスできた
