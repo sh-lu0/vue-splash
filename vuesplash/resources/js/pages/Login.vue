@@ -12,39 +12,17 @@
         @click="tab = 2"
       >Register</li>
     </ul>
-    <!-- v-show を使えば tab が特定の値のときのみ表示される要素を作成することができる -->
-    <div
-      class="panel"
-      v-show="tab === 1"
-    >
-      <!-- preventでデフォルトのフォーム送信の挙動をキャンセルしページリロードを抑制 -->
-      <form
-        class="form"
-        @submit.prevent="login"
-      >
+    <div class="panel" v-show="tab === 1">
+      <form class="form" @submit.prevent="login">
         <label for="login-email">Email</label>
-        <input
-          type="text"
-          class="form__item"
-          id="login-email"
-          v-model="loginForm.email"
-        >
+        <input type="text" class="form__item" id="login-email" v-model="loginForm.email">
         <label for="login-password">Password</label>
-        <input
-          type="password"
-          class="form__item"
-          id="login-password"
-          v-model="loginForm.password"
-        >
+        <input type="password" class="form__item" id="login-password" v-model="loginForm.password">
         <div class="form__button">
-          <button
-            type="submit"
-            class="button button--inverse"
-          >login</button>
+          <button type="submit" class="button button--inverse">login</button>
         </div>
       </form>
     </div>
-
     <div class="panel" v-show="tab === 2">
       <form class="form" @submit.prevent="register">
         <label for="username">Name</label>
@@ -60,18 +38,17 @@
         </div>
       </form>
     </div>
-
   </div>
 </template>
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       tab: 1,
       loginForm: {
-        email: "",
-        password: ""
+        email: '',
+        password: ''
       },
       registerForm: {
         name: '',
@@ -79,15 +56,21 @@ export default {
         password: '',
         password_confirmation: ''
       }
-    };
+    }
   },
   methods: {
-    login() {
-      console.log(this.loginForm);
+    async login () {
+      // authストアのloginアクションを呼び出す
+      await this.$store.dispatch('auth/login', this.loginForm)
+      // トップページに移動する
+      this.$router.push('/')
     },
-    register () {
-      console.log(this.registerForm)
+    async register () {
+      // authストアのresigterアクションを呼び出す
+      await this.$store.dispatch('auth/register', this.registerForm)
+      // トップページに移動する
+      this.$router.push('/')
     }
   }
-};
+}
 </script>
