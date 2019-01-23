@@ -108,3 +108,33 @@ $ valet install
 $ brew link php72 --force
 ```
 無事アクセスできた
+
+---
+
+## migrateできない（未解決）
+```$ php artisan migrate```を実行するとエラー
+
+```
+Illuminate\Database\QueryException  : SQLSTATE[08006] [7] FATAL:  password authentication failed for user "postgres" (SQL: select * from information_schema.tables where table_schema = public and table_name = migrations)
+
+  at /Users/chiaki/Projects/vue-splash/vuesplash/vendor/laravel/framework/src/Illuminate/Database/Connection.php:664
+    660|         // If an exception occurs when attempting to run a query, we'll format the error
+    661|         // message to include the bindings with SQL, which will make this exception a
+    662|         // lot more helpful to the developer instead of just the database's errors.
+    663|         catch (Exception $e) {
+  > 664|             throw new QueryException(
+    665|                 $query, $this->prepareBindings($bindings), $e
+    666|             );
+    667|         }
+    668|
+
+  Exception trace:
+
+  1   PDOException::("SQLSTATE[08006] [7] FATAL:  password authentication failed for user "postgres"")
+      /Users/chiaki/Projects/vue-splash/vuesplash/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php:70
+
+  2   PDO::__construct("pgsql:host=127.0.0.1;dbname=vuesplash;port=5432;sslmode=prefer", "postgres", "postgres", [])
+      /Users/chiaki/Projects/vue-splash/vuesplash/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php:70
+
+  Please use the argument -v to see more details.
+  ```
